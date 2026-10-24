@@ -110,7 +110,7 @@ fun TeleprompterView(state: TeleprompterState, onTap: () -> Unit, modifier: Modi
 
     Box(
         modifier
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(24.dp))
             .background(Color.Black.copy(alpha = state.alpha * 0.85f))
             .onSizeChanged { viewH = it.height }
             .graphicsLayer { scaleX = if (state.mirror) -1f else 1f }
@@ -157,7 +157,7 @@ fun TeleprompterView(state: TeleprompterState, onTap: () -> Unit, modifier: Modi
                 "tap = play",
                 color = Color.White.copy(alpha = 0.6f),
                 fontSize = 11.sp,
-                modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp)
+                modifier = Modifier.align(Alignment.BottomEnd).padding(12.dp)
             )
         }
     }

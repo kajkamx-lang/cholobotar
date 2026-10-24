@@ -10,23 +10,21 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import androidx.compose.runtime.withFrameNanos
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -46,6 +44,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(vm: StudioViewModel) {
     val ctx = LocalContext.current
+    val g = LocalGlass.current
     var tab by rememberSaveable { mutableIntStateOf(0) }
 
     val permLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -80,20 +79,8 @@ fun MainScreen(vm: StudioViewModel) {
         }
     }
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        bottomBar = {
-            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
-                NavigationBarItem(selected = tab == 0, onClick = { tab = 0 },
-                    icon = { Text("🎬") }, label = { Text("Studio") })
-                NavigationBarItem(selected = tab == 1, onClick = { tab = 1 },
-                    icon = { Text("📜") }, label = { Text("Script") })
-                NavigationBarItem(selected = tab == 2, onClick = { tab = 2 },
-                    icon = { Text("⚙️") }, label = { Text("Setup") })
-            }
-        }
-    ) { padding ->
-        Box(Modifier.padding(padding)) {
+    Column(Modifier.fillMaxSize().background(g.bg)) {
+        Box(Modifier.weight(1f).fillMaxWidth()) {
             when (tab) {
                 0 -> StudioScreen(vm, toggleMic)
                 1 -> ScriptScreen(vm)
@@ -104,5 +91,6 @@ fun MainScreen(vm: StudioViewModel) {
                 )
             }
         }
+        BottomTabs(tab) { tab = it }
     }
 }
